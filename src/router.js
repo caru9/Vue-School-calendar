@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Absence from './Absence'
 import Lesson from './Lesson.vue'
 import Cluster from './Cluster.vue'
 import Home from './Home.vue'
