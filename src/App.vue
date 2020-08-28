@@ -1,8 +1,28 @@
 <template>
   <div id='app'> 
     <Header></Header>
-    <router-link to="/home"> Menu </router-link>
-    <router-view></router-view>
+    <div v-if="!connected">
+            <h1> Bienvenu sur le site de school calendar </h1> 
+            <p v-if="registered"> Votre compte à bien été créer. Merci de vous connecter. </p>
+        
+              <div class="section1" >
+                    <button @click="seelogin =true"> Se connecter </button> 
+                    <button @click="seelogin =false"> Créer un compte </button> 
+                    <div v-if="seelogin">  <Login v-on:userlogged="event_logged"></Login>  </div> 
+                    <div v-else>  <Register v-on:event_out="event_registered"></Register> </div>  
+              </div>
+     </div>  
+     <div v-else> 
+                <div class="grid-menu">
+                <div class="box"><router-link to="/lesson"> Gestion de leçons </router-link></div>
+                <div class="box"><router-link to="/cluster"> Gestion des classes et des élèves </router-link></div>
+                <div class="box"><router-link to="/absence"> Gestion des absences </router-link></div>
+                </div>
+
+                <router-view></router-view>
+
+     </div>    
+
     <Footer></Footer>
   </div>
 </template>
@@ -10,87 +30,67 @@
 <script>
 import Header from './Header.vue'
 import Footer from './Footer.vue'
+import Login from './Login.vue'
+import Register from './Register'
 export default {
   name: 'app',
-  components:{Header,Footer},
+  components: {Header,Login,Register,Footer},
   data () {
-  }, 
-  methods:{
+    return {
+        seelogin:true,
+        connected:false,
+        registered:false,
+    }
+  },
+  methods: {
+    event_registered(message) {
+      this.registered = message; 
+    },
+    event_logged(message) {
+      this.connected=message; 
+    }
   }
 }
 </script>
 
-<style>
-:root {
-    --dark-green :#188A86; 
-    --yellow : #FFBC00; 
-    --ocean:#57C8B6; 
-    --dark-grey:#898F96; 
-    --light-grey: #E7E9EC; 
-    --white-smoke:rgb(244,245,251);  
+<style scoped>
+button {
+  padding: 20px; 
+  border-radius: 8px;
+  text-decoration:none; 
+  color:#FFBC00;
+  background-color:whitesmoke;   
+  font-size:25px; 
+  border:none;
 }
 
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.section1 {
+  text-align:center; 
 }
 
 h1 {
     font:bold; 
-    color:var(--dark-grey);
+    color:#188A86;
     font-size:35px;; 
     text-align:center; 
     padding-bottom: 25px; 
 }
 
-h2 {
-    font:bold; 
-    color:var(--ocean); 
-    font-size:1.5em; 
-    text-align:center; 
+.grid-menu { 
+  display:grid; 
+  grid-template-columns:1fr 1fr 1fr;
 }
 
-h3 {
-    color:var(--yellow); 
-    font-size:1.1em; 
+.box{
+  background-color: whitesmoke; 
+  text-align:center; 
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
+.grid-menu > .box > a {
+  font-size: 20px; 
+  color: grey;
 }
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-.wowtable {
-    width: 80%; 
-    border-collapse: collapse; 
-    margin: 0 auto; 
-}
-
-.wowtable td, .wowtable th {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-
-.wowtable tr:nth-child(odd){background-color: #f2f2f2;}
-
-
-th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color:var(--dark-grey);
-  color: white;
-}
-
-
-
 
 </style>
+
+
